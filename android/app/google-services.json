@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "778373320188",
+    "project_id": "jr-linguist-85a69",
+    "storage_bucket": "jr-linguist-85a69.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778373320188:android:3de6252b614da37488f679",
+        "android_client_info": {
+          "package_name": "com.example.jr_linguist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "778373320188-0qchhloiquqi6efj6fckcnbcdne9a9j9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqSEa7SJuSOX5PDFzW6QdbVzvLuadL7ro"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "778373320188-0qchhloiquqi6efj6fckcnbcdne9a9j9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
