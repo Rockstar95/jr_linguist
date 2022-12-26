@@ -7,6 +7,7 @@ import 'package:jr_linguist/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
+import 'providers/question_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<ConnectionProvider>(create: (_) => ConnectionProvider(),),
         ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider(),),
+        ChangeNotifierProvider<QuestionProvider>(create: (_) => QuestionProvider(),),
       ],
       child: const MainApp(),
     );
