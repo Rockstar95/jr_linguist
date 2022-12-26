@@ -44,6 +44,7 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: NavigationController.mainNavigatorKey,
       debugShowCheckedModeBanner: false,
       onGenerateRoute: NavigationController().onGeneratedRoutes,
     );

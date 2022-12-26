@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jr_linguist/controllers/providers/user_provider.dart';
+import 'package:jr_linguist/providers/user_provider.dart';
 import 'package:jr_linguist/screens/home_screen/user_profile_screen.dart';
 import 'package:jr_linguist/utils/SizeConfig.dart';
 import 'package:jr_linguist/utils/my_print.dart';
