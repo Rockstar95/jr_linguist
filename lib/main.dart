@@ -2,8 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jr_linguist/controllers/navigation_controller.dart';
-import 'package:jr_linguist/controllers/providers/connection_provider.dart';
-import 'package:jr_linguist/controllers/providers/user_provider.dart';
+import 'package:jr_linguist/providers/connection_provider.dart';
+import 'package:jr_linguist/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';

@@ -2,8 +2,8 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:jr_linguist/controllers/providers/connection_provider.dart';
-import 'package:jr_linguist/controllers/providers/user_provider.dart';
+import 'package:jr_linguist/providers/connection_provider.dart';
+import 'package:jr_linguist/providers/user_provider.dart';
 import 'package:jr_linguist/controllers/user_controller.dart';
 import 'package:jr_linguist/screens/common/components/modal_progress_hud.dart';
 import 'package:jr_linguist/screens/common/components/pin_put.dart';
@@ -97,12 +97,12 @@ class _OtpScreenState extends State<OtpScreen> {
 
         //_otpController?.text = "";
         if (mounted) setState(() {});
-        Snakbar().showErrorSnakbar(context: context, error_message: "Try Again");
+        Snakbar.showErrorSnakbar(context: context, msg: "Try Again");
         //_otpController?.text = "";
       },
       codeSent: (verificationId, [forceResendingToken]) {
         print("OTP Sent");
-        Snakbar().showSuccessSnakbar(context: context, success_message: "Otp Sent");
+        Snakbar.showSuccessSnakbar(context: context, msg: "Otp Sent");
         //MyToast.showSuccess("OTP sent to your mobile", context);
         this.verificationId = verificationId;
         // istimer = true;
@@ -134,7 +134,7 @@ class _OtpScreenState extends State<OtpScreen> {
         otpErrorMsg = "";
         isTimerOn = false;
         if (mounted) setState(() {});
-        Snakbar().showSuccessSnakbar(context: context, success_message: "Try Again");
+        Snakbar.showSuccessSnakbar(context: context, msg: "Try Again");
       },
     );
   }
@@ -173,7 +173,7 @@ class _OtpScreenState extends State<OtpScreen> {
       print("Error in Verifying OTP in Auth_Service:" + e.code);
 
       if (e.code == "invalid-verification-code") {
-        Snakbar().showErrorSnakbar(context: context, error_message: "Wrong OTP");
+        Snakbar.showErrorSnakbar(context: context, msg: "Wrong OTP");
       }
 
       setState(() {
@@ -441,7 +441,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 bool result = await verifyOTP(otp: otp, verificationId: verificationId);
               }
               else {
-                Snakbar().showErrorSnakbar(context: context, error_message: "OTP Expired, Plase Resend");
+                Snakbar.showErrorSnakbar(context: context, msg: "OTP Expired, Plase Resend");
               }
             }
           }
@@ -450,7 +450,7 @@ class _OtpScreenState extends State<OtpScreen> {
           }
         }
         else {
-          Snakbar().showErrorSnakbar(context: context, error_message: "No Internet");
+          Snakbar.showErrorSnakbar(context: context, msg: "No Internet");
         }
       },
       child: Container(

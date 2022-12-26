@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:jr_linguist/controllers/authentication_controller.dart';
-import 'package:jr_linguist/controllers/providers/connection_provider.dart';
-import 'package:jr_linguist/controllers/providers/user_provider.dart';
+import 'package:jr_linguist/providers/connection_provider.dart';
+import 'package:jr_linguist/providers/user_provider.dart';
 import 'package:jr_linguist/controllers/user_controller.dart';
 import 'package:jr_linguist/screens/authentication/login_screen.dart';
 import 'package:jr_linguist/screens/home_screen/main_page.dart';

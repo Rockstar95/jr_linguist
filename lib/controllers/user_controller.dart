@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:jr_linguist/controllers/firestore_controller.dart';
-import 'package:jr_linguist/controllers/providers/user_provider.dart';
+import 'package:jr_linguist/configs/constants.dart';
+import 'package:jr_linguist/providers/user_provider.dart';
 import 'package:jr_linguist/models/user_model.dart';
 import 'package:jr_linguist/utils/my_print.dart';
 import 'package:provider/provider.dart';
@@ -10,9 +10,7 @@ class UserController {
   static UserController? _instance;
 
   factory UserController() {
-    if(_instance == null) {
-      _instance = UserController._();
-    }
+    _instance ??= UserController._();
     return _instance!;
   }
 
@@ -22,14 +20,15 @@ class UserController {
     if(uid.isEmpty) return false;
 
     MyPrint.printOnConsole("Uid:${uid}");
-    if(uid == null || uid.isEmpty) return false;
+    if(uid.isEmpty) return false;
 
     bool isUserExist = false;
 
-    try {
-      DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await FirestoreController().firestore.collection('users').doc(uid).get();
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
 
-      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    try {
+      DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await FirebaseNodes.usersDocumentReference(userId: uid).get();
+
       if(documentSnapshot.exists && (documentSnapshot.data()?.isNotEmpty ?? false)) {
         UserModel userModel = UserModel.fromMap(documentSnapshot.data()!);
         userProvider.userModel = userModel;
@@ -63,9 +62,9 @@ class UserController {
       //if(clientModel.ClientPhoneNo.isNotEmpty) data['ClientPhoneNo'] = clientModel.ClientPhoneNo;
       //if(clientModel.ClientEmailId.isNotEmpty) data['ClientEmailId'] = clientModel.ClientEmailId;
       //data.remove("ClientId");
-      Map<String, dynamic> data = userModel.tomap();
+      Map<String, dynamic> data = userModel.toMap();
 
-      await FirestoreController().firestore.collection("users").doc(userModel.id).set(data);
+      await FirebaseNodes.usersDocumentReference(userId: userModel.id).set(data);
 
       UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
       userProvider.userModel = userModel;

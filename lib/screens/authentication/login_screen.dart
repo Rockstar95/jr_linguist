@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:jr_linguist/controllers/authentication_controller.dart';
-import 'package:jr_linguist/controllers/providers/connection_provider.dart';
-import 'package:jr_linguist/controllers/providers/user_provider.dart';
+import 'package:jr_linguist/providers/connection_provider.dart';
+import 'package:jr_linguist/providers/user_provider.dart';
 import 'package:jr_linguist/controllers/user_controller.dart';
 import 'package:jr_linguist/screens/authentication/otp_screen.dart';
 import 'package:jr_linguist/screens/common/components/modal_progress_hud.dart';
@@ -79,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
     else {
-      Snakbar().showErrorSnakbar(context: context, error_message: "No Internet");
+      Snakbar.showErrorSnakbar(context: context, msg: "No Internet");
     }
 
   }
