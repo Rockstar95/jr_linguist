@@ -43,6 +43,12 @@ class UserController {
         userModel.email = userProvider.firebaseUser?.email ?? "";
         userModel.image = userProvider.firebaseUser?.photoURL ?? "";
         userModel.createdTime = Timestamp.now();
+        userModel.completedQuestionsListLanguageAndTypeWise = {
+          LanguagesType.english : {
+            QuestionType.audio : [],
+            QuestionType.image : [],
+          },
+        };
         bool isSuccess = await UserController().createUser(context, userModel);
         MyPrint.printOnConsole("Insert Client Success:${isSuccess}");
       }
