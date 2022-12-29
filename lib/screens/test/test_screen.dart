@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:jr_linguist/configs/constants.dart';
 import 'package:jr_linguist/controllers/question_controller.dart';
@@ -163,7 +164,12 @@ class _QuestionWidgetState extends State<QuestionWidget> {
 
   Widget getQuestionResourceWidget({required QuestionModel questionModel}) {
     if(questionModel.questionType == QuestionType.image) {
-      return CachedNetworkImage(imageUrl: questionModel.questionResourceUrl);
+      return Flexible(
+        child: CachedNetworkImage(
+          imageUrl: questionModel.questionResourceUrl,
+          placeholder: (_, __) => const SpinKitFadingCircle(color: Styles.primaryColor,),
+        ),
+      );
     }
     else {
       return ElevatedButton(
