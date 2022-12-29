@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jr_linguist/utils/parsing_helper.dart';
 
 class QuestionModel {
   String id = "", question = "", questionType = "", languageType = "", questionResourceUrl = "";
   Map<String, bool> answers = <String, bool>{};
+  Timestamp? createdTime;
 
   QuestionModel({
     this.id = "",
@@ -13,6 +15,7 @@ class QuestionModel {
     this.languageType = "",
     this.questionResourceUrl = "",
     Map<String, bool>? answersMap,
+    this.createdTime,
   }) {
     answers = answersMap ?? <String, bool>{};
   }
@@ -32,9 +35,10 @@ class QuestionModel {
     languageType = ParsingHelper.parseStringMethod(map['languageType']);
     questionResourceUrl = ParsingHelper.parseStringMethod(map['questionResourceUrl']);
     answers = ParsingHelper.parseMapMethod<dynamic, dynamic, String, bool>(map['answers']);
+    createdTime = ParsingHelper.parseTimestampMethod(map['createdTime']);
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap({bool isJson = false}) {
     return <String, dynamic>{
       "id" : id,
       "question" : question,
@@ -42,11 +46,12 @@ class QuestionModel {
       "languageType" : languageType,
       "questionResourceUrl" : questionResourceUrl,
       "answers" : answers,
+      "createdTime" : isJson ? createdTime?.toDate().toIso8601String() : createdTime,
     };
   }
 
   @override
   String toString() {
-    return jsonEncode(toMap());
+    return jsonEncode(toMap(isJson: true));
   }
 }
