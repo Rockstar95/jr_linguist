@@ -125,8 +125,14 @@ class _HomeScreenState extends State<HomeScreen> {
     List<QuestionModel> audioQuestions = questionProvider.audioQuestions;
     List<QuestionModel> imageQuestions = questionProvider.imageQuestions;
 
+    List<String> audioQuestionIds = audioQuestions.map((e) => e.id).toList();
+    List<String> imageQuestionIds = imageQuestions.map((e) => e.id).toList();
+
     List<String> completedAudioQuestionsList = userModel?.completedQuestionsListLanguageAndTypeWise[questionProvider.selectedLanguage]?[QuestionType.audio] ?? <String>[];
+    completedAudioQuestionsList.removeWhere((element) => !audioQuestionIds.contains(element));
+
     List<String> completedImageQuestionsList = userModel?.completedQuestionsListLanguageAndTypeWise[questionProvider.selectedLanguage]?[QuestionType.image] ?? <String>[];
+    completedImageQuestionsList.removeWhere((element) => !imageQuestionIds.contains(element));
 
     return SingleChildScrollView(
       child: Container(
