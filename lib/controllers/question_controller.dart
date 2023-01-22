@@ -9,32 +9,42 @@ import 'package:jr_linguist/utils/my_print.dart';
 import 'package:jr_linguist/utils/myutils.dart';
 import 'package:provider/provider.dart';
 
-class QuestionController {
-  Future<List<QuestionModel>> getQuestionsFromLanguage({bool isNotify = true}) async {
-    QuestionProvider questionProvider = Provider.of<QuestionProvider>(NavigationController.mainNavigatorKey.currentContext!, listen: false);
+import '../utils/parsing_helper.dart';
 
-    MyPrint.printOnConsole("QuestionController().getQuestionsFromLanguage() called with language:'${questionProvider.selectedLanguage}'");
+class QuestionController {
+  late QuestionProvider _questionProvider;
+
+  QuestionController({required QuestionProvider? questionProvider}) {
+    _questionProvider = questionProvider ?? QuestionProvider();
+  }
+
+  QuestionProvider get questionProvider => _questionProvider;
+
+  Future<List<QuestionModel>> getQuestionsFromLanguage({bool isNotify = true}) async {
+    QuestionProvider provider = questionProvider;
+
+    MyPrint.printOnConsole("QuestionController().getQuestionsFromLanguage() called with language:'${provider.selectedLanguage}'");
 
     List<QuestionModel> questions = <QuestionModel>[];
 
-    if(questionProvider.selectedLanguage.isEmpty) {
+    if(provider.selectedLanguage.isEmpty) {
       return questions;
     }
 
-    questionProvider.isLoadingQuestions = true;
-    if(isNotify) questionProvider.notifyListeners();
+    provider.isLoadingQuestions = true;
+    if(isNotify) provider.notifyListeners();
 
-    MyFirestoreQuerySnapshot querySnapshot = await FirebaseNodes.questionsCollectionReference.where("languageType", isEqualTo: questionProvider.selectedLanguage).get();
+    MyFirestoreQuerySnapshot querySnapshot = await FirebaseNodes.questionsCollectionReference.where("languageType", isEqualTo: provider.selectedLanguage).get();
 
     questions.addAll(querySnapshot.docs.map((e) {
       return QuestionModel.fromMap(e.data());
     }));
 
-    MyPrint.printOnConsole("Final Questions Length for Language '${questionProvider.selectedLanguage}':${questions.length}");
-    questionProvider.audioQuestions = questions.where((element) => element.questionType == QuestionType.audio).toList();
-    questionProvider.imageQuestions = questions.where((element) => element.questionType == QuestionType.image).toList();
-    questionProvider.isLoadingQuestions = false;
-    questionProvider.notifyListeners();
+    MyPrint.printOnConsole("Final Questions Length for Language '${provider.selectedLanguage}':${questions.length}");
+    provider.audioQuestions = questions.where((element) => element.questionType == QuestionType.audio).toList();
+    provider.imageQuestions = questions.where((element) => element.questionType == QuestionType.image).toList();
+    provider.isLoadingQuestions = false;
+    provider.notifyListeners();
 
     return questions;
   }
@@ -56,6 +66,45 @@ class QuestionController {
       });
     }
   }
+
+  //region Posters
+  Future<Map<String, String>> getLanguagewisePostersData({bool isNotify = true}) async {
+    MyPrint.printOnConsole("QuestionController().getLanguagewisePostersData() called");
+
+    QuestionProvider provider = questionProvider;
+
+    Map<String, String> data = <String, String>{};
+
+    provider.isLoadingPosters = true;
+    if(isNotify) provider.notifyListeners();
+
+    try {
+      MyFirestoreDocumentSnapshot snapshot = await FirebaseNodes.languagewisePostersDocumentReference().get();
+      MyPrint.printOnConsole("snapshot data:${snapshot.data()}");
+
+      if(snapshot.exists && (snapshot.data() ?? {}).isNotEmpty) {
+        snapshot.data()!.forEach((String language, dynamic urlDynamic) {
+          String url = ParsingHelper.parseStringMethod(urlDynamic);
+          if(url.isNotEmpty) {
+            data[language] = url;
+          }
+        });
+      }
+      MyPrint.printOnConsole("Final Posters Data:$data");
+    }
+    catch(e, s) {
+      MyPrint.printOnConsole("Error in QuestionController().getLanguagewisePostersData():$e");
+      MyPrint.printOnConsole(s);
+    }
+
+    provider.posters = data;
+
+    provider.isLoadingPosters = false;
+    provider.notifyListeners();
+
+    return data;
+  }
+  //endregion
 
   Future<void> addDummyQuestion() async {
     /*QuestionModel questionModel = QuestionModel(
