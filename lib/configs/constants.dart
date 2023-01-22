@@ -23,6 +23,19 @@ class LanguagesType {
 }
 
 class FirebaseNodes {
+  //region Admin Collection
+  static const String adminCollection = 'admin';
+
+  //region Language-Wise Posters document
+  static const String languagewisePostersDocument = 'languagewisePosters';
+
+  static MyFirestoreDocumentReference languagewisePostersDocumentReference() => FirestoreController.documentReference(
+    collectionName: adminCollection,
+    documentId: languagewisePostersDocument,
+  );
+  //endregion
+  //endregion
+
   //region Users Collection
   static const String usersCollection = 'users';
 
