@@ -25,12 +25,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late ThemeData themeData;
 
+  late QuestionProvider questionProvider;
+  late QuestionController questionController;
+
   Future<void> resetQuestion({required String languageType, required String questionType}) async {
-    /*QuestionController().addDummyQuestion();
+    /*questionController.addDummyQuestion();
     return;*/
 
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    QuestionController().resetQuestionTypeForLanguage(
+    questionController.resetQuestionTypeForLanguage(
       language: languageType,
       questionType: questionType,
     );
@@ -40,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> startTest({required String languageType, required String questionType, required List<QuestionModel> questions}) async {
-    /*QuestionController().addDummyQuestion();
+    /*questionController.addDummyQuestion();
     return;*/
 
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -79,8 +82,13 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    QuestionController().getQuestionsFromLanguage(isNotify: false);
+    questionProvider = Provider.of<QuestionProvider>(context, listen: false);
+    questionController = QuestionController(questionProvider: questionProvider);
+
+    questionController.getQuestionsFromLanguage(isNotify: false);
+    questionController.getLanguagewisePostersData(isNotify: false);
   }
+
   @override
   Widget build(BuildContext context) {
     themeData = Theme.of(context);
@@ -113,7 +121,8 @@ class _HomeScreenState extends State<HomeScreen> {
             selectedLanguage: questionProvider.selectedLanguage,
             onLanguageSelected: (String newLanguage) {
               questionProvider.selectedLanguage = newLanguage;
-              QuestionController().getQuestionsFromLanguage();
+              questionController.getQuestionsFromLanguage();
+              questionController.getLanguagewisePostersData(isNotify: true);
             },
           ),
         ],

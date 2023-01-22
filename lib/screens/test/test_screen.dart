@@ -85,7 +85,7 @@ class _TestScreenState extends State<TestScreen> {
           onRightAnswer: () {
             score++;
             // UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-            QuestionController().answerQuestion(
+            QuestionController(questionProvider: null).answerQuestion(
               language: questionModel.languageType,
               questionType: questionModel.questionType,
               questionId: questionModel.id,
