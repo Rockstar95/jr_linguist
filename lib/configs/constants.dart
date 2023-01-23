@@ -7,18 +7,20 @@ class QuestionType {
 }
 
 class LanguagesType {
-  static const String english = "English";
+  // static const String english = "English";
   static const String hindi = "Hindi";
+  static const String gujarati = "Gujarati";
   static const String marathi = "Marathi";
-  static const String tamil = "Tamil";
-  static const String telugu = "Telugu";
+  static const String sanskrit = "Sanskrit";
+  static const String kannad = "Kannad";
 
   static const List<String> languages = <String>[
-    english,
+    // english,
     hindi,
+    gujarati,
     marathi,
-    tamil,
-    telugu,
+    sanskrit,
+    kannad,
   ];
 }
 

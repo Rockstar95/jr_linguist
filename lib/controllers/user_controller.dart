@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:jr_linguist/configs/constants.dart';
-import 'package:jr_linguist/providers/user_provider.dart';
 import 'package:jr_linguist/models/user_model.dart';
+import 'package:jr_linguist/providers/user_provider.dart';
 import 'package:jr_linguist/utils/my_print.dart';
 import 'package:provider/provider.dart';
 
@@ -44,7 +44,7 @@ class UserController {
         userModel.image = userProvider.firebaseUser?.photoURL ?? "";
         userModel.createdTime = Timestamp.now();
         userModel.completedQuestionsListLanguageAndTypeWise = {
-          LanguagesType.english : {
+          LanguagesType.hindi : {
             QuestionType.audio : [],
             QuestionType.image : [],
           },

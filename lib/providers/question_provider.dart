@@ -6,7 +6,7 @@ class QuestionProvider extends ChangeNotifier {
   bool isLoadingQuestions = false;
   List<QuestionModel> audioQuestions = <QuestionModel>[], imageQuestions = <QuestionModel>[];
 
-  String selectedLanguage = LanguagesType.english;
+  String selectedLanguage = LanguagesType.hindi;
 
   bool isLoadingPosters = false;
   Map<String, String> posters = <String, String>{};
