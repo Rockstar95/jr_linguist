@@ -1,6 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:jr_linguist/configs/constants.dart';
 import 'package:jr_linguist/controllers/question_controller.dart';
 import 'package:jr_linguist/models/question_model.dart';
 import 'package:jr_linguist/models/user_model.dart';
@@ -10,19 +9,20 @@ import 'package:jr_linguist/screens/test/test_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../controllers/user_controller.dart';
+import '../../utils/SizeConfig.dart';
 import '../../utils/my_print.dart';
 import '../../utils/styles.dart';
 import '../common/components/app_bar.dart';
 import '../common/components/language_selection_dropdown.dart';
 
-class HomeScreen2 extends StatefulWidget {
-  const HomeScreen2({Key? key}) : super(key: key);
+class QuizScreen extends StatefulWidget {
+  const QuizScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen2> createState() => _HomeScreen2State();
+  State<QuizScreen> createState() => _QuizScreenState();
 }
 
-class _HomeScreen2State extends State<HomeScreen2> {
+class _QuizScreenState extends State<QuizScreen> {
   late ThemeData themeData;
 
   late QuestionProvider questionProvider;
@@ -112,7 +112,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
 
   Widget getAppBar({required QuestionProvider questionProvider}) {
     return MyAppBar(
-      title: "Home2",
+      title: "Quiz",
       color: Colors.white,
       backbtnVisible: false,
       rightrow: Row(
@@ -122,7 +122,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
             onLanguageSelected: (String newLanguage) {
               questionProvider.selectedLanguage = newLanguage;
               questionController.getQuestionsFromLanguage();
-              questionController.getLanguagewisePostersData();
+              questionController.getLanguagewisePostersData(isNotify: true);
             },
           ),
         ],
@@ -131,35 +131,132 @@ class _HomeScreen2State extends State<HomeScreen2> {
   }
 
   Widget getMainBody({UserModel? userModel, required QuestionProvider questionProvider}) {
-    if(questionProvider.isLoadingPosters) {
-      return const Center(
-        child: SpinKitFadingCircle(
-          color: Styles.primaryColor,
-        ),
-      );
-    }
+    List<QuestionModel> audioQuestions = questionProvider.audioQuestions;
+    List<QuestionModel> imageQuestions = questionProvider.imageQuestions;
 
-    String imageUrl = questionProvider.posters[questionProvider.selectedLanguage] ?? "";
+    List<String> audioQuestionIds = audioQuestions.map((e) => e.id).toList();
+    List<String> imageQuestionIds = imageQuestions.map((e) => e.id).toList();
 
-    if(imageUrl.isEmpty) {
-      return const Center(
-        child: Text("No Poster Available"),
-      );
-    }
+    List<String> completedAudioQuestionsList = userModel?.completedQuestionsListLanguageAndTypeWise[questionProvider.selectedLanguage]?[QuestionType.audio] ?? <String>[];
+    completedAudioQuestionsList.removeWhere((element) => !audioQuestionIds.contains(element));
+
+    List<String> completedImageQuestionsList = userModel?.completedQuestionsListLanguageAndTypeWise[questionProvider.selectedLanguage]?[QuestionType.image] ?? <String>[];
+    completedImageQuestionsList.removeWhere((element) => !imageQuestionIds.contains(element));
 
     return SingleChildScrollView(
       child: Container(
-        // padding: EdgeInsets.symmetric(horizontal: MySize.size20!),
+        padding: EdgeInsets.symmetric(horizontal: MySize.size20!),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            CachedNetworkImage(
-              imageUrl: imageUrl,
-              placeholder: (_, __) => const SpinKitFadingCircle(color: Styles.primaryColor,),
+            const SizedBox(height: 10,),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: getScoreWidget(
+                    text: "${QuestionType.audio} Score",
+                    score: completedAudioQuestionsList.length,
+                    languageType: questionProvider.selectedLanguage,
+                    questionType: QuestionType.audio,
+                    questions: audioQuestions,
+                    userId: userModel?.id ?? "",
+                  ),
+                ),
+                const SizedBox(width: 10,),
+                Expanded(
+                  child: getScoreWidget(
+                    text: "${QuestionType.image} Score",
+                    score: completedImageQuestionsList.length,
+                    languageType: questionProvider.selectedLanguage,
+                    questionType: QuestionType.image,
+                    questions: imageQuestions,
+                    userId: userModel?.id ?? "",
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget getScoreWidget({required String text, required int score, required String languageType, required String questionType, required List<QuestionModel> questions, required String userId}) {
+    int questionsLength = questions.length;
+
+    bool isReset = questions.isNotEmpty && score > 0;
+    bool isRetest = questions.isNotEmpty && score > 0;
+    bool isCompleteTest = questions.isNotEmpty && score > 0 && score < questions.length;
+    bool isStartTest = questions.isNotEmpty && score == 0;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        AspectRatio(
+          aspectRatio: 1,
+          child: Container(
+            decoration: BoxDecoration(
+              color: themeData.colorScheme.onPrimary,
+              shape: BoxShape.circle,
+              border: Border.all(color: themeData.primaryColor),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  text,
+                ),
+                Text(
+                  "Score: $score/$questionsLength",
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 10,),
+        if(isReset) ElevatedButton(
+          onPressed: () async {
+            resetQuestion(
+              languageType: languageType,
+              questionType: questionType,
+            );
+          },
+          child: const Text("Reset"),
+        ),
+        if(isRetest) ElevatedButton(
+          onPressed: () async {
+            reTest(
+              languageType: languageType,
+              questionType: questionType,
+              questions: questions,
+            );
+          },
+          child: const Text("Retest"),
+        ),
+        if(isCompleteTest) ElevatedButton(
+          onPressed: () async {
+            completeTest(
+              languageType: languageType,
+              questionType: questionType,
+              questions: questions,
+            );
+          },
+          child: const Text("Complete Test"),
+        ),
+        if(isStartTest) ElevatedButton(
+          onPressed: () async {
+            startTest(
+              languageType: languageType,
+              questionType: questionType,
+              questions: questions,
+            );
+          },
+          child: const Text("Start"),
+        ),
+      ],
     );
   }
 }

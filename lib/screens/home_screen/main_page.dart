@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:jr_linguist/providers/user_provider.dart';
-import 'package:jr_linguist/screens/home_screen/home_screen2.dart';
+import 'package:jr_linguist/screens/home_screen/home_screen.dart';
 import 'package:jr_linguist/screens/home_screen/user_profile_screen.dart';
 import 'package:jr_linguist/utils/SizeConfig.dart';
 import 'package:jr_linguist/utils/my_print.dart';
 import 'package:jr_linguist/utils/styles.dart';
 import 'package:provider/provider.dart';
 
-import 'home_screen.dart';
+import 'quiz_screen.dart';
 
 class MainPage extends StatefulWidget {
   static const String routeName = "/MainPage";
@@ -114,13 +114,13 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
   }
 
   Widget getHome() {
-    homeWidget ??= const HomeScreen();
+    homeWidget ??= const QuizScreen();
 
     return homeWidget!;
   }
 
   Widget getHome2() {
-    home2Widget ??= const HomeScreen2();
+    home2Widget ??= const HomeScreen();
 
     return home2Widget!;
   }
@@ -162,12 +162,12 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
               Tab(
                 icon: Icon(Icons.home, size: MySize.size28,),
                 iconMargin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                text: "Home2",
+                text: "Home",
               ),
               Tab(
                 icon: Icon(Icons.home, size: MySize.size28,),
                 iconMargin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                text: "Home",
+                text: "Quiz",
               ),
               Tab(
                 icon: Icon(Icons.person, size: MySize.size28,),
