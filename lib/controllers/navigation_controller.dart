@@ -6,6 +6,8 @@ import 'package:jr_linguist/splash_screen.dart';
 import 'package:jr_linguist/utils/my_print.dart';
 
 class NavigationController {
+  static final GlobalKey<NavigatorState> mainNavigatorKey = GlobalKey<NavigatorState>();
+
   Route? onGeneratedRoutes(RouteSettings routeSettings) {
     MyPrint.printOnConsole("OnGeneratedRoutes Called for ${routeSettings.name} with arguments:${routeSettings.arguments}");
 

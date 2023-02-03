@@ -2,11 +2,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jr_linguist/controllers/navigation_controller.dart';
-import 'package:jr_linguist/controllers/providers/connection_provider.dart';
-import 'package:jr_linguist/controllers/providers/user_provider.dart';
+import 'package:jr_linguist/providers/connection_provider.dart';
+import 'package:jr_linguist/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
+import 'providers/question_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<ConnectionProvider>(create: (_) => ConnectionProvider(),),
         ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider(),),
+        ChangeNotifierProvider<QuestionProvider>(create: (_) => QuestionProvider(),),
       ],
       child: const MainApp(),
     );
@@ -44,6 +46,7 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: NavigationController.mainNavigatorKey,
       debugShowCheckedModeBanner: false,
       onGenerateRoute: NavigationController().onGeneratedRoutes,
     );
