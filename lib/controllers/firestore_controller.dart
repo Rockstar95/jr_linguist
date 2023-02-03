@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class FirestoreController {
+import '../configs/typedefs.dart';
 
-  static FirestoreController? _instance;
-  factory FirestoreController() {
-    _instance ??= FirestoreController._();
-    return _instance!;
+class FirestoreController {
+  static FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  static MyFirestoreCollectionReference collectionReference({required String collectionName, String? documentId}) {
+    return firestore.collection(collectionName);
   }
 
-  FirestoreController._();
-
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  static MyFirestoreDocumentReference documentReference({required String collectionName, String? documentId}) {
+    return firestore.collection(collectionName).doc(documentId);
+  }
 }

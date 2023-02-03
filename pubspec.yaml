@@ -46,6 +46,7 @@ dependencies:
   top_snackbar_flutter: ^3.0.0
   cached_network_image: ^3.2.1
   intl: ^0.17.0
+  flutter_tts: ^3.6.2
 
 dev_dependencies:
   flutter_test:

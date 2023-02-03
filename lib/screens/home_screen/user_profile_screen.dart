@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:jr_linguist/controllers/authentication_controller.dart';
-import 'package:jr_linguist/controllers/providers/user_provider.dart';
+import 'package:jr_linguist/providers/user_provider.dart';
 import 'package:jr_linguist/screens/common/components/MyCupertinoAlertDialogWidget.dart';
 import 'package:jr_linguist/screens/common/components/app_bar.dart';
 import 'package:jr_linguist/screens/common/components/modal_progress_hud.dart';

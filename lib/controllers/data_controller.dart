@@ -5,13 +5,13 @@ class DataController {
   Future<String> getNewDocId() async {
     String docId = "";
 
-    docId = await FirestoreController().firestore.collection("Temp").add({"name" : "dfghm"}).then((DocumentReference reference) async {
+    docId = await FirestoreController.collectionReference(collectionName: "Temp").add({"name" : "dfghm"}).then((DocumentReference reference) async {
       await reference.delete();
 
       return reference.id;
     });
 
-    print("DocId:" + docId);
+    print("DocId:$docId");
     return docId;
   }
 }

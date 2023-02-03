@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:jr_linguist/controllers/providers/user_provider.dart';
+import 'package:jr_linguist/providers/user_provider.dart';
 import 'package:jr_linguist/screens/authentication/login_screen.dart';
 import 'package:jr_linguist/utils/my_print.dart';
 import 'package:jr_linguist/utils/snakbar.dart';
@@ -72,7 +72,7 @@ class AuthenticationController {
               MyPrint.printOnConsole("Methods:${methods}");
 
               MyPrint.printOnConsole("Message:Account Already Exist With Different Method");
-              Snakbar().showErrorSnakbar(context: context, error_message: "Account Already Exist With Different Method");
+              Snakbar.showErrorSnakbar(context: context, msg: "Account Already Exist With Different Method");
             }
             break;
 
@@ -80,35 +80,35 @@ class AuthenticationController {
             {
               message = "Credential is Invalid";
               MyPrint.printOnConsole("Message:Invalid Credentials");
-              Snakbar().showErrorSnakbar(context: context, error_message: "Invalid Credentials");
+              Snakbar.showErrorSnakbar(context: context, msg: "Invalid Credentials");
             }
             break;
 
           case "operation-not-allowed" :
             {
               MyPrint.printOnConsole("Message:${e.message}");
-              Snakbar().showErrorSnakbar(context: context, error_message: "${e.message}");
+              Snakbar.showErrorSnakbar(context: context, msg: "${e.message}");
             }
             break;
 
           case "user-disabled" :
             {
               MyPrint.printOnConsole("Message:${e.message}");
-              Snakbar().showErrorSnakbar(context: context, error_message: "${e.message}");
+              Snakbar.showErrorSnakbar(context: context, msg: "${e.message}");
             }
             break;
 
           case "user-not-found" :
             {
               MyPrint.printOnConsole("Message:${e.message}");
-              Snakbar().showErrorSnakbar(context: context, error_message: "${e.message}");
+              Snakbar.showErrorSnakbar(context: context, msg: "${e.message}");
             }
             break;
 
           case "wrong-password" :
             {
               MyPrint.printOnConsole("Message:${e.message}");
-              Snakbar().showErrorSnakbar(context: context, error_message: "${e.message}");
+              Snakbar.showErrorSnakbar(context: context, msg: "${e.message}");
             }
             break;
 
@@ -116,7 +116,7 @@ class AuthenticationController {
             {
               message = "Error in Authentication";
               MyPrint.printOnConsole("Message:${e.message}");
-              Snakbar().showErrorSnakbar(context: context, error_message: "${e.message}");
+              Snakbar.showErrorSnakbar(context: context, msg: "${e.message}");
             }
         }
       }
