@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:jr_linguist/controllers/authentication_controller.dart';
+import 'package:jr_linguist/controllers/user_controller.dart';
 import 'package:jr_linguist/providers/connection_provider.dart';
 import 'package:jr_linguist/providers/user_provider.dart';
-import 'package:jr_linguist/controllers/user_controller.dart';
 import 'package:jr_linguist/screens/authentication/otp_screen.dart';
 import 'package:jr_linguist/screens/common/components/modal_progress_hud.dart';
 import 'package:jr_linguist/screens/home_screen/main_page.dart';
@@ -303,45 +303,49 @@ class _LoginScreenState extends State<LoginScreen> {
         borderRadius:
         BorderRadius.all(Radius.circular(MySize.size48!)),
       ),
-      child: FlatButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(MySize.size16!)),
-        color: Styles.primaryColor,
+      child: InkWell(
+        onTap: sendOtp,
         highlightColor: Styles.primaryColor,
         splashColor: Colors.white.withAlpha(100),
-        padding: EdgeInsets.only(top: MySize.size16!, bottom: MySize.size16!),
-        onPressed: sendOtp,
-        child: Stack(
-          clipBehavior: Clip.antiAlias,
-          alignment: Alignment.center,
-          children: <Widget>[
-            const Align(
-              alignment: Alignment.center,
-              child: Text(
-                "CONTINUE",
-                style: TextStyle(
-                    color: Colors.white,
-                    letterSpacing: 0.8,
-                    fontWeight: FontWeight.w700),
-              ),
-            ),
-            Positioned(
-              right: 16,
-              child: ClipOval(
-                child: Container(
-                  color: Colors.white,
-                  // button color
-                  child: SizedBox(
-                      width: MySize.size30,
-                      height: MySize.size30,
-                      child: Icon(
-                        Icons.arrow_forward,
-                        color: Styles.primaryColor,
-                        size: MySize.size18,
-                      )),
+        child: Container(
+          padding: EdgeInsets.only(top: MySize.size16!, bottom: MySize.size16!),
+          decoration: BoxDecoration(
+            color: Styles.primaryColor,
+            borderRadius: BorderRadius.circular(MySize.size16!),
+          ),
+          child: Stack(
+            clipBehavior: Clip.antiAlias,
+            alignment: Alignment.center,
+            children: <Widget>[
+              const Align(
+                alignment: Alignment.center,
+                child: Text(
+                  "CONTINUE",
+                  style: TextStyle(
+                      color: Colors.white,
+                      letterSpacing: 0.8,
+                      fontWeight: FontWeight.w700),
                 ),
               ),
-            ),
-          ],
+              Positioned(
+                right: 16,
+                child: ClipOval(
+                  child: Container(
+                    color: Colors.white,
+                    // button color
+                    child: SizedBox(
+                        width: MySize.size30,
+                        height: MySize.size30,
+                        child: Icon(
+                          Icons.arrow_forward,
+                          color: Styles.primaryColor,
+                          size: MySize.size18,
+                        )),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
