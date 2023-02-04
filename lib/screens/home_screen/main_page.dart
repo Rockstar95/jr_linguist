@@ -7,6 +7,7 @@ import 'package:jr_linguist/utils/my_print.dart';
 import 'package:jr_linguist/utils/styles.dart';
 import 'package:provider/provider.dart';
 
+import '../digital_ink_recognization/digital_ink_recognizer_screen.dart';
 import 'quiz_screen.dart';
 
 class MainPage extends StatefulWidget {
@@ -22,12 +23,12 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
 
   late TabController _tabController;
 
-  Widget? homeWidget, home2Widget, profileWidget;
+  Widget? homeWidget, home2Widget, inkScreen, profileWidget;
 
   bool isNotificationSet=true;
 
   _handleTabSelection() {
-    FocusScope.of(context).requestFocus(new FocusNode());
+    FocusScope.of(context).requestFocus(FocusNode());
 
     MyPrint.printOnConsole("_handleTabSelection called");
     UserProvider dataProvider = Provider.of<UserProvider>(context, listen: false);
@@ -70,7 +71,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
     super.initState();
     MyPrint.printOnConsole("Main Page INIT Called");
 
-    _tabController = TabController(length: 3, vsync: this,initialIndex: 0);
+    _tabController = TabController(length: 4, vsync: this,initialIndex: 0);
     _tabController.addListener(_handleTabSelection);
     _tabController.animation!.addListener(_handleTabSelectionInAnimation);
 
@@ -101,11 +102,13 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
           backgroundColor: Colors.transparent,
           bottomNavigationBar: getBottomBar(userProvider),
           body: TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
             controller: _tabController,
             children: <Widget>[
-              getHome2(),
-              getHome(),
-              getUserProfile()
+              getHomeScreen(),
+              getQuizScreen(),
+              getInkScreen(),
+              getUserProfile(),
             ],
           ),
         ),
@@ -113,16 +116,22 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
     );
   }
 
-  Widget getHome() {
+  Widget getQuizScreen() {
     homeWidget ??= const QuizScreen();
 
     return homeWidget!;
   }
 
-  Widget getHome2() {
+  Widget getHomeScreen() {
     home2Widget ??= const HomeScreen();
 
     return home2Widget!;
+  }
+
+  Widget getInkScreen() {
+    inkScreen ??= const DigitalInkRecognizerScreen();
+
+    return inkScreen!;
   }
 
   Widget getUserProfile() {
@@ -145,7 +154,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
           ),
           child: TabBar(
             onTap: (int val) {
-              FocusScope.of(context).requestFocus(new FocusNode());
+              FocusScope.of(context).requestFocus(FocusNode());
             },
             controller: _tabController,
             indicator: const BoxDecoration(),
@@ -165,9 +174,14 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
                 text: "Home",
               ),
               Tab(
-                icon: Icon(Icons.home, size: MySize.size28,),
+                icon: Icon(Icons.quiz, size: MySize.size28,),
                 iconMargin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                 text: "Quiz",
+              ),
+              Tab(
+                icon: Icon(Icons.edit, size: MySize.size28,),
+                iconMargin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                text: "Notepad",
               ),
               Tab(
                 icon: Icon(Icons.person, size: MySize.size28,),
