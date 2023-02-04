@@ -59,4 +59,15 @@ class FirebaseNodes {
     documentId: questionId,
   );
   //endregion
+
+  //region Poster Collection
+  static const String postersCollection = 'posters';
+
+  static MyFirestoreCollectionReference get postersCollectionReference => FirestoreController.collectionReference(collectionName: postersCollection);
+
+  static MyFirestoreDocumentReference postersDocumentReference({String? posterId}) => FirestoreController.documentReference(
+    collectionName: postersCollection,
+    documentId: posterId,
+  );
+  //endregion
 }

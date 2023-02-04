@@ -2,14 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jr_linguist/configs/constants.dart';
 import 'package:jr_linguist/configs/typedefs.dart';
 import 'package:jr_linguist/controllers/navigation_controller.dart';
+import 'package:jr_linguist/models/poster_model.dart';
 import 'package:jr_linguist/models/question_model.dart';
 import 'package:jr_linguist/providers/question_provider.dart';
 import 'package:jr_linguist/providers/user_provider.dart';
 import 'package:jr_linguist/utils/my_print.dart';
 import 'package:jr_linguist/utils/myutils.dart';
 import 'package:provider/provider.dart';
-
-import '../utils/parsing_helper.dart';
 
 class QuestionController {
   late QuestionProvider _questionProvider;
@@ -68,41 +67,42 @@ class QuestionController {
   }
 
   //region Posters
-  Future<Map<String, String>> getLanguagewisePostersData({bool isNotify = true}) async {
+  Future<List<PosterModel>> getLanguagewisePostersData({bool isNotify = true}) async {
     MyPrint.printOnConsole("QuestionController().getLanguagewisePostersData() called");
 
     QuestionProvider provider = questionProvider;
 
-    Map<String, String> data = <String, String>{};
-
     provider.isLoadingPosters = true;
     if(isNotify) provider.notifyListeners();
+    
+    List<PosterModel> posters = <PosterModel>[];
 
     try {
-      MyFirestoreDocumentSnapshot snapshot = await FirebaseNodes.languagewisePostersDocumentReference().get();
-      MyPrint.printOnConsole("snapshot data:${snapshot.data()}");
+      Query<Map<String, dynamic>> query = FirebaseNodes.postersCollectionReference
+          .where("languageType", isEqualTo: provider.selectedLanguage)
+          .orderBy("priority", descending: false);
+      MyPrint.printOnConsole("query:${query.parameters}");
 
-      if(snapshot.exists && (snapshot.data() ?? {}).isNotEmpty) {
-        snapshot.data()!.forEach((String language, dynamic urlDynamic) {
-          String url = ParsingHelper.parseStringMethod(urlDynamic);
-          if(url.isNotEmpty) {
-            data[language] = url;
-          }
-        });
-      }
-      MyPrint.printOnConsole("Final Posters Data:$data");
+      MyFirestoreQuerySnapshot querySnapshot = await query.get();
+      MyPrint.printOnConsole("Query snapshot data length:${querySnapshot.docs.length}");
+
+      posters.addAll(querySnapshot.docs.map((e) {
+        return PosterModel.fromMap(e.data());
+      }));
+      
+      MyPrint.printOnConsole("Final Posters Length for Language '${provider.selectedLanguage}':${posters.length}");
     }
     catch(e, s) {
       MyPrint.printOnConsole("Error in QuestionController().getLanguagewisePostersData():$e");
       MyPrint.printOnConsole(s);
     }
 
-    provider.posters = data;
+    provider.posters = posters;
 
     provider.isLoadingPosters = false;
     provider.notifyListeners();
 
-    return data;
+    return provider.posters;
   }
   //endregion
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jr_linguist/configs/constants.dart';
+import 'package:jr_linguist/models/poster_model.dart';
 import 'package:jr_linguist/models/question_model.dart';
 
 class QuestionProvider extends ChangeNotifier {
@@ -9,5 +10,5 @@ class QuestionProvider extends ChangeNotifier {
   String selectedLanguage = LanguagesType.hindi;
 
   bool isLoadingPosters = false;
-  Map<String, String> posters = <String, String>{};
+  List<PosterModel> posters = <PosterModel>[];
 }

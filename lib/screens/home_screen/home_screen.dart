@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:jr_linguist/controllers/question_controller.dart';
+import 'package:jr_linguist/models/poster_model.dart';
 import 'package:jr_linguist/models/question_model.dart';
 import 'package:jr_linguist/models/user_model.dart';
 import 'package:jr_linguist/providers/question_provider.dart';
@@ -139,27 +140,29 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    String imageUrl = questionProvider.posters[questionProvider.selectedLanguage] ?? "";
+    List<PosterModel> posters = questionProvider.posters;
 
-    if(imageUrl.isEmpty) {
+    if(posters.isEmpty) {
       return const Center(
         child: Text("No Poster Available"),
       );
     }
 
-    return SingleChildScrollView(
-      child: Container(
-        // padding: EdgeInsets.symmetric(horizontal: MySize.size20!),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CachedNetworkImage(
-              imageUrl: imageUrl,
-              placeholder: (_, __) => const SpinKitFadingCircle(color: Styles.primaryColor,),
+    return ListView.builder(
+      itemCount: posters.length,
+      itemBuilder: (BuildContext context, int index) {
+        PosterModel posterModel = posters[index];
+
+        return CachedNetworkImage(
+          imageUrl: posterModel.posterUrl,
+          placeholder: (_, __) => const SizedBox(
+            height: 200,
+            child: Center(
+              child: SpinKitFadingCircle(color: Styles.primaryColor,),
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
