@@ -9,7 +9,6 @@ import '../../controllers/question_controller.dart';
 import '../../providers/question_provider.dart';
 import '../../utils/styles.dart';
 import '../common/components/app_bar.dart';
-import '../common/components/language_selection_dropdown.dart';
 
 class DigitalInkRecognizerScreen extends StatefulWidget {
   const DigitalInkRecognizerScreen({super.key});
@@ -25,7 +24,7 @@ class _DigitalInkRecognizerScreenState extends State<DigitalInkRecognizerScreen>
   late QuestionController questionController;
 
   final DigitalInkRecognizerModelManager _modelManager = DigitalInkRecognizerModelManager();
-  String _language = 'en-US';
+  final String _language = 'en-US';
   late final DigitalInkRecognizer _digitalInkRecognizer = DigitalInkRecognizer(languageCode: _language);
   final Ink _ink = Ink();
   List<StrokePoint> _points = [];
@@ -162,22 +161,16 @@ class _DigitalInkRecognizerScreenState extends State<DigitalInkRecognizerScreen>
   Widget build(BuildContext context) {
     themeData = Theme.of(context);
 
-    return Consumer<QuestionProvider>(
-      builder: (BuildContext context, QuestionProvider questionProvider, Widget? child) {
-        _language = getLanguageFromLanguageName(languageName: questionProvider.selectedLanguage);
-
-        return Scaffold(
-          backgroundColor: Styles.background,
-          body: Column(
-            children: [
-              getAppBar(questionProvider: questionProvider),
-              Expanded(
-                child: getMainBody(questionProvider: questionProvider),
-              ),
-            ],
+    return Scaffold(
+      backgroundColor: Styles.background,
+      body: Column(
+        children: [
+          getAppBar(questionProvider: questionProvider),
+          Expanded(
+            child: getMainBody(questionProvider: questionProvider),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 
@@ -186,7 +179,7 @@ class _DigitalInkRecognizerScreenState extends State<DigitalInkRecognizerScreen>
       title: "Notepad",
       color: Colors.white,
       backbtnVisible: false,
-      rightrow: Row(
+      /*rightrow: Row(
         children: [
           LanguageSelectionDropdownWidget(
             selectedLanguage: questionProvider.selectedLanguage,
@@ -197,21 +190,21 @@ class _DigitalInkRecognizerScreenState extends State<DigitalInkRecognizerScreen>
             },
           ),
         ],
-      ),
+      ),*/
     );
   }
 
   Widget getMainBody({required QuestionProvider questionProvider}) {
     return Column(
       children: [
-        Container(
+        /*Container(
           margin: const EdgeInsets.symmetric(vertical: 10),
           child: Text(
             'Language Code: $_language',
             style: const TextStyle(fontSize: 14),
           ),
         ),
-        const SizedBox(height: 10,),
+        const SizedBox(height: 10,),*/
         Expanded(
           child: GestureDetector(
             onPanStart: (DragStartDetails details) {
